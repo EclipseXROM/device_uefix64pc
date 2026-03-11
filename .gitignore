@@ -1,0 +1,10 @@
+# Generated kernel outputs
+prebuilts/kernel/bzImage
+prebuilts/modules/*
+!prebuilts/modules/.gitkeep
+
+# Local build artifacts
+out/
+
+# Optional proprietary NVIDIA blobs
+kern/nvidia/*.ko
