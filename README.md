@@ -8,9 +8,9 @@ This repository contains the device configuration for bringing Android 17 (Andro
 | --- | --- |
 | `AndroidProducts.mk`, `android_x86_64.mk`, `cm.mk` | Register the `cm_android_x86_64` product and lunch combos.
 | `BoardConfig.mk` | Describes the x86_64 board, prebuilt kernel hook, and module packaging (including NVIDIA).
-| `kern/linux-6.19.6.tar.xz` | Upstream kernel tarball that we compile against Android headers.
+| `kern/linux-6.19.6/` | Extracted upstream kernel sources (place any newer tree here and point `KERNEL_TREE`).
 | `kern/nvidia/` | Drop prebuilt NVIDIA modules here (they are picked up automatically).
-| `kern/build_kernel.sh` | Helper script that extracts the kernel tarball, builds it, and refreshes the prebuilts consumed by the Android build.
+| `kern/build_kernel.sh` | Helper script that builds the kernel from the extracted tree and refreshes the prebuilts consumed by the Android build.
 | `prebuilts/kernel/` | Contains the resulting `bzImage` consumed as the board kernel.
 | `prebuilts/modules/` | Aggregated kernel modules (stock + NVIDIA) copied into the vendor image.
 
@@ -23,9 +23,9 @@ repo sync -c -j$(nproc)
 
 Place this repository inside the synced tree under `device/eclipsex/uefix64pc` (or adjust the `inherit-product` path). The `cm_android_x86_64` target will then appear in `lunch` once you source `build/envsetup.sh`.
 
-## Building the kernel from `kern/linux-6.19.6.tar.xz`
+## Building the kernel from `kern/linux-6.19.6/`
 
-1. Ensure the tarball exists at `kern/linux-6.19.6.tar.xz` (update the version or path via the `KERNEL_ARCHIVE` env var if needed).
+1. Place the extracted kernel source tree inside `kern/linux-6.19.6/` (override via `KERNEL_TREE=/path/to/src`).
 2. (Optional) Drop any NVIDIA `.ko` modules extracted from the proprietary driver into `kern/nvidia/`.
 3. Run the helper script:
    ```bash
@@ -35,8 +35,7 @@ Place this repository inside the synced tree under `device/eclipsex/uefix64pc` (
    ```
 
 The script will:
-- Extract the kernel sources into `out/kernel/src` (re-extracting automatically when the archive changes).
-- Build `bzImage` and in-tree modules with the selected defconfig.
+- Build `bzImage` and in-tree modules with the selected defconfig from the existing source tree.
 - Copy the kernel image to `prebuilts/kernel/bzImage` and refresh every module under `prebuilts/modules/`.
 - Append any `.ko` files present in `kern/nvidia/` so NVIDIA graphics is available without rebuilding.
 

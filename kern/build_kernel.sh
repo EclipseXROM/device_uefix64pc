@@ -4,38 +4,22 @@ set -euo pipefail
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 DEVICE_DIR="$(cd "${SCRIPT_DIR}/.." && pwd)"
 WORK_DIR="${DEVICE_DIR}/out/kernel"
-SRC_DIR="${WORK_DIR}/src"
+SRC_TREE="${KERNEL_TREE:-${SCRIPT_DIR}/linux-6.19.6}"
 BUILD_DIR="${WORK_DIR}/build"
 PREBUILT_KERNEL_DIR="${DEVICE_DIR}/prebuilts/kernel"
 PREBUILT_MODULES_DIR="${DEVICE_DIR}/prebuilts/modules"
-KERNEL_ARCHIVE="${KERNEL_ARCHIVE:-${SCRIPT_DIR}/linux-6.19.6.tar.xz}"
 DEFCONFIG="${DEFCONFIG:-android-x86_64_defconfig}"
 JOBS="${JOBS:-$(nproc)}"
-STAMP_FILE="${WORK_DIR}/.kernel-archive.sha256"
 NVIDIA_DIR="${SCRIPT_DIR}/nvidia"
 
-if [[ ! -f "${KERNEL_ARCHIVE}" ]]; then
-  echo "[ERROR] Kernel archive not found: ${KERNEL_ARCHIVE}" >&2
+if [[ ! -d "${SRC_TREE}" ]]; then
+  echo "[ERROR] Kernel source tree not found: ${SRC_TREE}" >&2
   exit 1
 fi
 
 mkdir -p "${WORK_DIR}" "${BUILD_DIR}" "${PREBUILT_KERNEL_DIR}" "${PREBUILT_MODULES_DIR}"
 
-NEW_SUM="$(sha256sum "${KERNEL_ARCHIVE}" | awk '{print $1}')"
-CURRENT_SUM=""
-if [[ -f "${STAMP_FILE}" ]]; then
-  CURRENT_SUM="$(cat "${STAMP_FILE}")"
-fi
-
-if [[ "${NEW_SUM}" != "${CURRENT_SUM}" || ! -d "${SRC_DIR}" ]]; then
-  echo "[*] Extracting kernel archive ..."
-  rm -rf "${SRC_DIR}"
-  mkdir -p "${SRC_DIR}"
-  tar -xJf "${KERNEL_ARCHIVE}" -C "${SRC_DIR}" --strip-components=1
-  echo "${NEW_SUM}" > "${STAMP_FILE}"
-fi
-
-pushd "${SRC_DIR}" >/dev/null
+pushd "${SRC_TREE}" >/dev/null
 make O="${BUILD_DIR}" "${DEFCONFIG}"
 make O="${BUILD_DIR}" -j"${JOBS}"
 popd >/dev/null
