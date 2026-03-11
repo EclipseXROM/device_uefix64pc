@@ -18,7 +18,7 @@
 $(call inherit-product,device/generic/common/x86_64.mk)
 
 # Overrides
-PRODUCT_NAME := cm_android_x86_64
-PRODUCT_BRAND := Android-x86
-PRODUCT_DEVICE := android_x86_64
-PRODUCT_MODEL := Generic Android-x86_64
+PRODUCT_NAME := eclipsex_uefix64pc
+PRODUCT_BRAND := EclipseXROM
+PRODUCT_DEVICE := uefix64pc
+PRODUCT_MODEL := EclipseX UEFI x64 Reference
