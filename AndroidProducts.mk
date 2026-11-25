@@ -14,8 +14,10 @@
 # limitations under the License.
 #
 
+# <product>:<path> form - the product name is the mk basename by default
+# (android_x86_64), so pin it explicitly to keep the eclipsex_* lunch name.
 PRODUCT_MAKEFILES := \
-    $(LOCAL_DIR)/android_x86_64.mk
+    eclipsex_uefix64pc:$(LOCAL_DIR)/android_x86_64.mk
 
 COMMON_LUNCH_CHOICES := \
     eclipsex_uefix64pc-eng \
