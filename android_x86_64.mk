@@ -22,3 +22,7 @@ PRODUCT_NAME := eclipsex_uefix64pc
 PRODUCT_BRAND := EclipseXROM
 PRODUCT_DEVICE := uefix64pc
 PRODUCT_MODEL := EclipseX UEFI x64 Reference
+
+# EclipseX common product layer (first-party suite, EclipseX Home, debloat).
+# -if-exists so this file also parses before `repo sync` pulls common.
+$(call inherit-product-if-exists, vendor/eclipsex/common/eclipsex.mk)
