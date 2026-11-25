@@ -16,3 +16,8 @@
 
 PRODUCT_MAKEFILES := \
     $(LOCAL_DIR)/android_x86_64.mk
+
+COMMON_LUNCH_CHOICES := \
+    eclipsex_uefix64pc-eng \
+    eclipsex_uefix64pc-userdebug \
+    eclipsex_uefix64pc-user

@@ -20,6 +20,5 @@
 # In particular, you can add lunch options with the add_lunch_combo
 # function: add_lunch_combo generic-eng
 
-add_lunch_combo eclipsex_uefix64pc-eng
-add_lunch_combo eclipsex_uefix64pc-userdebug
-add_lunch_combo eclipsex_uefix64pc-user
+# Lunch combos now declared via COMMON_LUNCH_CHOICES in AndroidProducts.mk
+# (add_lunch_combo is obsolete in Android 16).
